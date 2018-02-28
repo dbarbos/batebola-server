@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Danjdewhurst\PassportFacebookLogin\FacebookLoginTrait;
@@ -10,6 +11,7 @@ class User extends Authenticatable
 {
     use Notifiable;
     use FacebookLoginTrait;
+    use HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -41,4 +43,15 @@ class User extends Authenticatable
     public function findForPassport($username) {  
         return $this->where('username', $username)->first();
     }
+
+    public function grupos()
+    {
+        return $this->hasMany('App\Grupo');
+    }
+
+    public function eventos()
+    {
+        return $this->hasMany('App\Evento');
+    }
+    
 }
