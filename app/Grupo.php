@@ -38,6 +38,11 @@ class Grupo extends Model
         return $this->users()->where('aprovado', '0')->get();
     }
 
+    public function usersApproved()
+    {
+        return $this->users()->where('aprovado', '1')->get();
+    }
+
 
 
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEventosTable extends Migration
+class CreateMedalhasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateEventosTable extends Migration
      */
     public function up()
     {
-        Schema::create('eventos', function (Blueprint $table) {
+        Schema::create('medalhas', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('grupo_id')->references('id')->on('grupos');
             $table->string('nome');
-            $table->dateTimeTz('data');
-            $table->string('local');
+            $table->string('descricao');
+            $table->integer('peso')->default(0);
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateEventosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('eventos');
+        Schema::dropIfExists('medalhas');
     }
 }
