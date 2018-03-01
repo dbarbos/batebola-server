@@ -44,14 +44,35 @@ class User extends Authenticatable
         return $this->where('username', $username)->first();
     }
 
-    public function grupos()
+    public function my_groups()
     {
-        return $this->hasMany('App\Grupo');
+        return $this->hasMany('App\Group');
     }
 
-    public function eventos()
+    public function groups_joined()
     {
-        return $this->hasMany('App\Evento');
+        return $this->hasManyThrough('App\Group','App\UserGroup', 'user_id', 'id', 'id', 'group_id');
+    }
+
+    public function events()
+    {
+        return $this->hasMany('App\Event');
+    }
+
+    public function badges() {
+        return $this->hasMany('App\UserBadge','player_id');
+    }
+
+    public function badges_given() {
+        return $this->hasMany('App\UserBadge','avaliator_id');
+    }
+
+    public function avaliations() {
+        return $this->hasMany('App\Avaliation','player_id');
+    }
+
+    public function avaliations_given() {
+        return $this->hasMany('App\Avaliation','avaliator_id');
     }
     
 }

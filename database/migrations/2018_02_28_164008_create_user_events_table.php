@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGruposTable extends Migration
+class CreateUserEventsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateGruposTable extends Migration
      */
     public function up()
     {
-        Schema::create('grupos', function (Blueprint $table) {
+        Schema::create('user_events', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->references('id')->on('users');
-            $table->string('nome');
+            $table->integer('event_id')->references('id')->on('events');
+            $table->boolean('paid')->default(false);
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateGruposTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('grupos');
+        Schema::dropIfExists('user_events');
     }
 }

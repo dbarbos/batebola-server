@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class UserEvento extends Model
+class UserEvent extends Model
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'user_eventos';
+    protected $table = 'user_events';
 
 
     public function user()
@@ -19,9 +19,9 @@ class UserEvento extends Model
         return $this->belongsTo('App\User');
     }
 
-    public function evento()
+    public function event()
     {
-        return $this->belongsTo('App\Evento');
+        return $this->belongsTo('App\Event');
     }
 
 }

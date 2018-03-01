@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class UserGrupo extends Model
+class UserGroup extends Model
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'user_grupos';
+    protected $table = 'user_groups';
 
 
     public function user()
@@ -19,9 +19,9 @@ class UserGrupo extends Model
         return $this->belongsTo('App\User');
     }
 
-    public function grupo()
+    public function group()
     {
-        return $this->belongsTo('App\Grupo');
+        return $this->belongsTo('App\Group');
     }
 
 }

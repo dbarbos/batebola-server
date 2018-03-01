@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddOwnerToGrupoTrigger extends Migration
+class AddOwnerToGroupTrigger extends Migration
 {
     /**
      * Run the migrations.
@@ -15,9 +15,9 @@ class AddOwnerToGrupoTrigger extends Migration
     {
         //
         DB::unprepared('
-        CREATE TRIGGER tr_ADD_OWNER_TO_GRUPO AFTER INSERT ON `grupos` FOR EACH ROW
+        CREATE TRIGGER tr_ADD_OWNER_TO_GROUP AFTER INSERT ON `groups` FOR EACH ROW
             BEGIN
-                INSERT INTO user_grupos (`user_id`, `grupo_id`, `aprovado`,`created_at`, `updated_at`) 
+                INSERT INTO user_groups (`user_id`, `group_id`, `approved`,`created_at`, `updated_at`) 
                 VALUES (NEW.user_id, NEW.id, 1, NOW(), NOW());
             END
         ');
@@ -31,6 +31,6 @@ class AddOwnerToGrupoTrigger extends Migration
     public function down()
     {
         //
-        DB::unprepared('DROP TRIGGER `tr_ADD_OWNER_TO_GRUPO`');
+        DB::unprepared('DROP TRIGGER `tr_ADD_OWNER_TO_GROUP`');
     }
 }

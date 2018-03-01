@@ -23,6 +23,7 @@ Route::get('/user', function (Request $request) {
 
 // Todas as rotas de GRUPO
 
-Route::get('/meus-grupos', 'Api\GrupoController@getMeusGrupos');
-Route::get('/todos-os-grupos/{search?}', 'Api\GrupoController@getTodosOsGrupos');
-Route::post('/criar-grupo', 'Api\GrupoController@createGrupo');
+Route::get('/my-groups', 'Api\GroupController@getMyGroups');
+Route::get('/groups-joined', 'Api\GroupController@getGroupsJoined');
+Route::get('/all-groups/{search?}', 'Api\GroupController@getAllGroups');
+Route::post('/create-group', 'Api\GroupController@createGroup');

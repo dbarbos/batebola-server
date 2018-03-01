@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class EventoController extends Controller
+class EventController extends Controller
 {
     //
 }
