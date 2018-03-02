@@ -41,6 +41,4 @@ class Group extends Model
         return $this->users()->where('approved', '1')->get();
     }
 
-
-
 }

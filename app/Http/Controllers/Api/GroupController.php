@@ -31,7 +31,30 @@ class GroupController extends Controller
     }
 
     public function getGroupsJoined() {
-        return response()->json($this->user->groups_joined()->with('owner')->get(), 200)->header('Content-Type', 'application/json');
+        $groups = $this->user->groups_joined()->with('owner')->get();
+        $user_id = $this->user->id;
+        $groups->map(function ($item) use ($user_id) {
+            $groupMember = Group::where('id', $item['id'])->with(['users' => 
+                function ($q) use ($user_id) {
+                    $q->where('user_id', $user_id)->get();
+                }])->get();
+          $item['approved'] = $groupMember->first()->users->first()->pivot->approved;
+          return $item;
+        });
+        return response()->json($groups, 200)->header('Content-Type', 'application/json');
+        //return response()->json($this->user->groups_joined()->with('owner')->get(), 200)->header('Content-Type', 'application/json');
+    }
+
+    public function getAllGroupsExceptJoined($search = '') {
+
+        $groupsJoined = $this->user->groups_joined->pluck('id');
+
+        return response()
+            ->json(Group::where('name','like','%' . $search . '%')
+            ->with('owner')
+            ->whereNotIn('id',$groupsJoined)
+            ->get(), 200)
+            ->header('Content-Type', 'application/json');
     }
 
     public function getAllGroups($search = '') {
@@ -41,7 +64,7 @@ class GroupController extends Controller
     public function createGroup(Request $request) {
     	$group = new Group;
     	try { 
-    		$group->fill($request->all()); 
+    		$group->fill($request->all());
     		$group->user_id = $this->user->id;
     		if ($group->save()) {
     			return response()->json("success",200)->header('Content-Type', 'application/json');

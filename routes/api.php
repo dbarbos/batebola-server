@@ -26,4 +26,5 @@ Route::get('/user', function (Request $request) {
 Route::get('/my-groups', 'Api\GroupController@getMyGroups');
 Route::get('/groups-joined', 'Api\GroupController@getGroupsJoined');
 Route::get('/all-groups/{search?}', 'Api\GroupController@getAllGroups');
+Route::get('/all-groups-except-joined/{search?}', 'Api\GroupController@getAllGroupsExceptJoined');
 Route::post('/create-group', 'Api\GroupController@createGroup');
