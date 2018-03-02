@@ -32,6 +32,7 @@ class GroupController extends Controller
 
     public function getGroupsJoined() {
         $groups = $this->user->groups_joined()->with('owner')->get();
+        //return response()->json($groups, 200);
         $user_id = $this->user->id;
         $groups->map(function ($item) use ($user_id) {
             $groupMember = Group::where('id', $item['id'])->with(['users' => 
@@ -47,7 +48,7 @@ class GroupController extends Controller
 
     public function getAllGroupsExceptJoined($search = '') {
 
-        $groupsJoined = $this->user->groups_joined->pluck('id');
+        $groupsJoined = array_keys(array_column($this->user->groups_joined()->get()->toArray(), null, "id"));
 
         return response()
             ->json(Group::where('name','like','%' . $search . '%')

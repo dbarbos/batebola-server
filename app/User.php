@@ -51,8 +51,9 @@ class User extends Authenticatable
 
     public function groups_joined()
     {
-        return $this
-            ->hasManyThrough('App\Group','App\UserGroup', 'user_id', 'id', 'id', 'group_id');
+        $groups = \App\UserGroup::where('user_id', $this->id)->pluck('group_id');
+        return \App\Group::whereIn('id', $groups);
+        //return $this->hasManyThrough('App\Group','App\UserGroup', 'user_id', 'id', 'id', 'group_id');
     }
 
     public function events()
