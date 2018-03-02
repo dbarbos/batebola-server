@@ -26,10 +26,16 @@ class GroupController extends Controller
         $this->user = Auth::guard('api')->user();
     }
 
+    public function getGroupById($id) {
+        return Group::find($id);
+    }
+
+    // retorna todos os grupos criados pelo usuário
     public function getMyGroups() {
     	return response()->json($this->user->my_groups, 200)->header('Content-Type', 'application/json');
     }
 
+    // retorna todos os grupos que o usuário faz parte e indica se ele já foi aprovado ou não (approved : Boolean)
     public function getGroupsJoined() {
         $groups = $this->user->groups_joined()->with('owner')->get();
         $user_id = $this->user->id;
@@ -45,6 +51,7 @@ class GroupController extends Controller
         //return response()->json($this->user->groups_joined()->with('owner')->get(), 200)->header('Content-Type', 'application/json');
     }
 
+    // retorna todos os grupos excluindo os que o usuário já está incluido
     public function getAllGroupsExceptJoined($search = '') {
 
         $groupsJoined = $this->user->groups_joined->pluck('id');
@@ -57,10 +64,12 @@ class GroupController extends Controller
             ->header('Content-Type', 'application/json');
     }
 
+    // retorna todos os grupos
     public function getAllGroups($search = '') {
     	return response()->json(Group::where('name','like','%' . $search . '%')->with('owner')->get(), 200)->header('Content-Type', 'application/json');
     }
 
+    // cria um novo grupo no banco
     public function createGroup(Request $request) {
     	$group = new Group;
     	try { 
