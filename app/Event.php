@@ -12,6 +12,7 @@ class Event extends Model
      * @var string
      */
     protected $table = 'events';
+    protected $fillable = ['group_id', 'name', 'date', 'local'];
 
     public function group()
     {

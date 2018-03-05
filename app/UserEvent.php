@@ -12,6 +12,7 @@ class UserEvent extends Model
      * @var string
      */
     protected $table = 'user_events';
+    protected $fillable = ['event_id','user_id', 'paid'];
 
 
     public function user()

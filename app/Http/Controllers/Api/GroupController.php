@@ -30,6 +30,10 @@ class GroupController extends Controller
         return Group::find($id);
     }
 
+    public function getGroupDetails($id) {
+        return Group::where('id', $id)->with(['owner', 'users', 'events'])->first();
+    }
+
     // retorna todos os grupos criados pelo usuário
     public function getMyGroups() {
     	return response()->json($this->user->my_groups, 200)->header('Content-Type', 'application/json');
