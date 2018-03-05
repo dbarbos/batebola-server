@@ -31,17 +31,25 @@ class GroupController extends Controller
     }
 
     public function getGroupDetails($id) {
-        return Group::where('id', $id)->with(['owner', 'users', 'events'])->first();
+        return Group::where('id', $id)
+            ->with(['owner', 'users', 'events'])
+            ->first();
     }
 
     // retorna todos os grupos criados pelo usuário
     public function getMyGroups() {
-    	return response()->json($this->user->my_groups, 200)->header('Content-Type', 'application/json');
+    	return response()
+            ->json($this->user->my_groups()->limit(30)->get(), 200)
+            ->header('Content-Type', 'application/json');
     }
 
     // retorna todos os grupos que o usuário faz parte e indica se ele já foi aprovado ou não (approved : Boolean)
     public function getGroupsJoined() {
-        $groups = $this->user->groups_joined()->with('owner')->get();
+        $groups = $this->user
+            ->groups_joined()
+            ->with('owner')
+            ->limit(30)
+            ->get();
         //return response()->json($groups, 200);
         $user_id = $this->user->id;
         $groups->map(function ($item) use ($user_id) {
@@ -52,7 +60,9 @@ class GroupController extends Controller
           $item['approved'] = $groupMember->first()->users->first()->pivot->approved;
           return $item;
         });
-        return response()->json($groups, 200)->header('Content-Type', 'application/json');
+        return response()
+            ->json($groups, 200)
+            ->header('Content-Type', 'application/json');
         //return response()->json($this->user->groups_joined()->with('owner')->get(), 200)->header('Content-Type', 'application/json');
     }
 
@@ -71,7 +81,9 @@ class GroupController extends Controller
 
     // retorna todos os grupos
     public function getAllGroups($search = '') {
-    	return response()->json(Group::where('name','like','%' . $search . '%')->with('owner')->get(), 200)->header('Content-Type', 'application/json');
+    	return response()
+            ->json(Group::where('name','like','%' . $search . '%')->with('owner')->get(), 200)
+            ->header('Content-Type', 'application/json');
     }
 
     // cria um novo grupo no banco

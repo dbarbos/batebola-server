@@ -32,7 +32,11 @@ class EventController extends Controller
     }
 
     public function getAllMyEvents() {
-        $events = Event::whereIn('id', UserEvent::where('user_id', $this->user->id)->pluck('event_id'))->with('group')->orderBy('date', 'DESC')->get();
+        $events = Event::whereIn('id', UserEvent::where('user_id', $this->user->id)->pluck('event_id'))
+	        ->with('group')
+	        ->orderBy('date', 'DESC')
+	        ->limit(30)
+	        ->get();
     	// $events->users->map(function ($users) {
     	// 	$users["paid"] = $users["pivot"]["paid"];
     	// });
