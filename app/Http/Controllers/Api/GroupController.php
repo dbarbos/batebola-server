@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\User;
 use App\Group;
+use App\UserGroup;
+use App\Event;
 use Auth;
 
 class GroupController extends Controller
@@ -27,13 +29,54 @@ class GroupController extends Controller
     }
 
     public function getGroupById($id) {
-        return Group::find($id);
-    }
-
-    public function getGroupDetails($id) {
-        return Group::where('id', $id)
+        $group = Group::where('id', $id)
             ->with(['owner', 'users', 'events'])
             ->first();
+
+        $group->users->map(function ($user) use ($id) {
+            $user["approved"] = $user["pivot"]["approved"];
+        });
+  
+        return response()
+            ->json($group, 200)
+            ->header('Content-Type', 'application/json');
+    }
+
+    public function getOwnerOfGroupById($id) {
+        return response()
+            ->json(User::find(Group::find($id)->user_id), 200)
+            ->header('Content-Type', 'application/json');
+    }
+
+    public function getMembersOfGroupById($id) {
+
+        $members = User::whereIn('id', UserGroup::where('group_id', $id)->pluck('user_id'))->get();
+
+        $members->map(function ($user) use ($id) {
+            $user["approved"] = UserGroup::where('user_id',$user["id"])
+                ->where('group_id',$id)
+                ->first()
+                ->approved;
+        });
+
+        return response()
+            ->json($members, 200)
+            ->header('Content-Type', 'application/json');
+    }
+
+    public function getEventsOfGroupById($id) {
+
+        $events = Event::where('group_id', $id)->with('users')->get();
+
+        $events->map(function ($event) {
+            $event['users']->map(function ($user) {
+                $user["paid"] = $user['pivot']['paid'];
+            });
+        });
+
+        return response()
+            ->json($events, 200)
+            ->header('Content-Type', 'application/json');
     }
 
     // retorna todos os grupos criados pelo usuário

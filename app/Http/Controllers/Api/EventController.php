@@ -31,6 +31,24 @@ class EventController extends Controller
         $this->user = Auth::guard('api')->user();
     }
 
+    public function getEventById($id) {
+        $events = Event::where('id', $id)->with('users')->first();
+        $events->users->map(function ($users) {
+            $users["paid"] = $users["pivot"]["paid"];
+        });
+
+        return response()->json($events, 200)->header('Content-Type', 'application/json');
+    }
+
+    public function getParticipantsOfEventById($id) {
+        $events = Event::where('id', $id)->with('users')->first();
+        $events->users->map(function ($users) {
+            $users["paid"] = $users["pivot"]["paid"];
+        });
+
+        return response()->json($events->users, 200)->header('Content-Type', 'application/json');
+    }
+
     public function getAllMyEvents() {
         $events = Event::whereIn('id', UserEvent::where('user_id', $this->user->id)->pluck('event_id'))
 	        ->with('group')
@@ -44,13 +62,13 @@ class EventController extends Controller
         return $events;
     }
 
-    public function getEventParticipants($id) {
+    public function getEventByIdWithParticipants($id) {
         $events = Event::where('id', $id)->with('users')->first();
     	$events->users->map(function ($users) {
     		$users["paid"] = $users["pivot"]["paid"];
     	});
 
-        return $events;
+        return response()->json($events, 200)->header('Content-Type', 'application/json');
     }
 
     // cria um novo evento no banco
