@@ -144,4 +144,20 @@ class GroupController extends Controller
     		return response()->json("error",500)->header('Content-Type', 'application/json');
     	}
     }
+
+    // cria um novo grupo no banco
+    public function joinGroup(Request $request) {
+        $user_group = new UserGroup;
+        try { 
+            $user_group->fill($request->all());
+            $user_group->user_id = $this->user->id;
+            if ($user_group->save()) {
+                return response()->json("success",200)->header('Content-Type', 'application/json');
+            }else{
+                return response()->json("error",500)->header('Content-Type', 'application/json');
+            }
+        }catch (\Exception $e) {
+            return response()->json("error",500)->header('Content-Type', 'application/json');
+        }
+    }
 }

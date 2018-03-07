@@ -12,6 +12,7 @@ class UserGroup extends Model
      * @var string
      */
     protected $table = 'user_groups';
+    protected $fillable = ['group_id','user_id', 'approved'];
 
 
     public function user()

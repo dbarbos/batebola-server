@@ -32,6 +32,7 @@ Route::get('/groups-joined', 'Api\GroupController@getGroupsJoined');
 Route::get('/all-groups/{search?}', 'Api\GroupController@getAllGroups');
 Route::get('/all-groups-except-joined/{search?}', 'Api\GroupController@getAllGroupsExceptJoined');
 Route::post('/create-group', 'Api\GroupController@createGroup');
+Route::post('/group/join', 'Api\GroupController@joinGroup');
 
 Route::get('/event/{id?}', 'Api\EventController@getEventById');
 Route::get('/event/{id?}/participants', 'Api\EventController@getParticipantsOfEventById');
